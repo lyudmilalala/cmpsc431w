@@ -8,7 +8,7 @@ CREATE TABLE employees
         ftpt varchar(10) CHECK (ftpt IN ('FT', 'PT')),
         PRIMARY KEY (empid));
 
-LOAD DATA LOCAL INFILE 'Desktop/class/CMPSC 431W/project/datafiles_2/employees.csv'
+LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/employees.csv'
         INTO TABLE employees
         FIELDS TERMINATED BY ','
         OPTIONALLY ENCLOSED BY '"'
@@ -23,7 +23,7 @@ CREATE TABLE departments
         description varchar(255),
         PRIMARY KEY (name));
 
-LOAD DATA LOCAL INFILE 'Desktop/class/CMPSC 431W/project/datafiles_2/departments.csv'
+LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/departments.csv'
         INTO TABLE departments
         FIELDS TERMINATED BY ','
         OPTIONALLY ENCLOSED BY '"'
@@ -32,28 +32,38 @@ LOAD DATA LOCAL INFILE 'Desktop/class/CMPSC 431W/project/datafiles_2/departments
 
 CREATE TABLE shifts
         (id int NOT NULL AUTO_INCREMENT,
-        f timestamp,
-        l timestamp,
+        start timestamp,
+        length timestamp,
         PRIMARY KEY(id));
 
-LOAD DATA LOCAL INFILE 'Desktop/class/CMPSC 431W/project/datafiles_2/shifts.csv'
+LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/shifts.csv'
         INTO TABLE shifts
         FIELDS TERMINATED BY ','
         OPTIONALLY ENCLOSED BY '"'
         LINES TERMINATED BY '\r\n'
-        IGNORE 1 ROWS (@FROM @LENGTH)
-        SET f = STR_TO_DATE(@FROM,'%h%p'),
-            l = STR_TO_DATE(@LENGTH,'%h');
+        IGNORE 1 ROWS (@FROM, @LENGTH)
+        SET start = STR_TO_DATE(@FROM,'%h%p'),
+            length = STR_TO_DATE(@LENGTH,'%h');
 
 CREATE TABLE schedule
         (id int NOT NULL AUTO_INCREMENT,
+        emp_id int,
+        dept varchar(255),
         date TIMESTAMP,
         start TIMESTAMP,
-        end TIMESTAMP,
-        emp_id int,
+        length TIMESTAMP,
         PRIMARY KEY(id),
-        FOREIGN KEY (emp_id) REFERENCES employees(empid) ON DELETE CASCADE ON UPDATE CASCADE);
+        FOREIGN KEY (empid) REFERENCES employees(empid) ON DELETE CASCADE ON UPDATE CASCADE);
 
+LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/schedule.csv'
+        INTO TABLE shifts
+        FIELDS TERMINATED BY ','
+        OPTIONALLY ENCLOSED BY '"'
+        LINES TERMINATED BY '\r\n'
+        IGNORE 1 ROWS (@col1, emp_id, dept, @col4, @col5)
+        SET date = STR_TO_DATE(@col1,'%m/%d/%Y'),
+            start = STR_TO_DATE(@col4,'%h%p'),
+            length = STR_TO_DATE(@col5,'%h');
 
 CREATE TABLE employees_departments
         (emp_id int,
