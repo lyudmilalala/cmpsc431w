@@ -1,0 +1,76 @@
+CREATE TABLE employees
+        (empid int NOT NULL,
+        lastName varchar(255) NOT NULL,
+        firstName varchar(255) NOT NULL,
+        emptype varchar(255),
+        cellphone varchar(255),
+        homephone varchar(255),
+        ftpt varchar(10) CHECK (ftpt IN ('FT', 'PT')),
+        PRIMARY KEY (empid));
+
+LOAD DATA LOCAL INFILE 'Desktop/class/CMPSC 431W/project/datafiles_2/employees.csv'
+        INTO TABLE employees
+        FIELDS TERMINATED BY ','
+        OPTIONALLY ENCLOSED BY '"'
+        LINES TERMINATED BY '\r\n'
+        IGNORE 1 ROWS;
+
+UPDATE employees SET cellphone=NULL WHERE cellphone='(none)';
+UPDATE employees SET homephone=NULL WHERE homephone='(none)';
+
+CREATE TABLE departments
+        (name varchar(255) NOT NULL,
+        description varchar(255),
+        PRIMARY KEY (name));
+
+LOAD DATA LOCAL INFILE 'Desktop/class/CMPSC 431W/project/datafiles_2/departments.csv'
+        INTO TABLE departments
+        FIELDS TERMINATED BY ','
+        OPTIONALLY ENCLOSED BY '"'
+        LINES TERMINATED BY '\r\n'
+        IGNORE 1 ROWS (name);
+
+CREATE TABLE shifts
+        (id int NOT NULL AUTO_INCREMENT,
+        f timestamp,
+        l timestamp,
+        PRIMARY KEY(id));
+
+LOAD DATA LOCAL INFILE 'Desktop/class/CMPSC 431W/project/datafiles_2/shifts.csv'
+        INTO TABLE shifts
+        FIELDS TERMINATED BY ','
+        OPTIONALLY ENCLOSED BY '"'
+        LINES TERMINATED BY '\r\n'
+        IGNORE 1 ROWS (@FROM @LENGTH)
+        SET f = STR_TO_DATE(@FROM,'%h%p'),
+            l = STR_TO_DATE(@LENGTH,'%h');
+
+CREATE TABLE schedule
+        (id int NOT NULL AUTO_INCREMENT,
+        date TIMESTAMP,
+        start TIMESTAMP,
+        end TIMESTAMP,
+        emp_id int,
+        PRIMARY KEY(id),
+        FOREIGN KEY (emp_id) REFERENCES employees(empid) ON DELETE CASCADE ON UPDATE CASCADE);
+
+
+CREATE TABLE employees_departments
+        (emp_id int,
+        dept_name varchar(255),
+        FOREIGN KEY (emp_id) REFERENCES employees(empid) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (dept_name) REFERENCES departments(name) ON DELETE CASCADE ON UPDATE CASCADE);
+
+CREATE TABLE rooms
+        (id int NOT NULL AUTO_INCREMENT,
+        floor int NOT NULL,
+        room_num int NOT NULL,
+        capacity int,
+        worker_num int,
+        PRIMARY KEY(id));
+
+CREATE TABLE rooms_departments
+        (room_id int,
+        dept_name varchar(255),
+        FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (dept_name) REFERENCES departments(name) ON DELETE CASCADE ON UPDATE CASCADE);
