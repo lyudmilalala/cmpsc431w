@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS 'employees';
+DROP TABLE IF EXISTS 'departments';
+DROP TABLE IF EXISTS 'shifts';
+DROP TABLE IF EXISTS 'schedule';
+
 CREATE TABLE employees
         (empid int NOT NULL,
         lastName varchar(255) NOT NULL,
