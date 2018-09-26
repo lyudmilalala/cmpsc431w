@@ -13,7 +13,7 @@ LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/employees.
         FIELDS TERMINATED BY ','
         OPTIONALLY ENCLOSED BY '"'
         LINES TERMINATED BY '\r\n'
-        IGNORE 1 ROWS;
+        IGNORE 1 LINES;
 
 UPDATE employees SET cellphone=NULL WHERE cellphone='(none)';
 UPDATE employees SET homephone=NULL WHERE homephone='(none)';
@@ -24,16 +24,16 @@ CREATE TABLE departments
         PRIMARY KEY (name));
 
 LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/departments.csv'
-        INTO TABLE departments
+        INTO TABLE depdartments
         FIELDS TERMINATED BY ','
         OPTIONALLY ENCLOSED BY '"'
         LINES TERMINATED BY '\r\n'
-        IGNORE 1 ROWS (name);
+        IGNORE 1 LINES (name);
 
 CREATE TABLE shifts
         (id int NOT NULL AUTO_INCREMENT,
-        start timestamp,
-        length timestamp,
+        start TIME,
+        length TIME,
         PRIMARY KEY(id));
 
 LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/shifts.csv'
@@ -41,46 +41,39 @@ LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/shifts.csv
         FIELDS TERMINATED BY ','
         OPTIONALLY ENCLOSED BY '"'
         LINES TERMINATED BY '\r\n'
-        IGNORE 1 ROWS (@FROM, @LENGTH)
-        SET start = STR_TO_DATE(@FROM,'%h%p'),
-            length = STR_TO_DATE(@LENGTH,'%h');
+        IGNORE 1 LINES (@col1, @col2)
+        SET start=STR_TO_DATE(@col1,'%h%p'),
+            length=STR_TO_DATE(@col2,'%H');
+
+/*
+back to strings
+SELECT DATE_FORMAT(start,'%h%p') FROM shifts;
+SELECT CONVERT(DATE_FORMAT(length,'%H'),UNSIGNED) FROM shifts;
+*/
 
 CREATE TABLE schedule
         (id int NOT NULL AUTO_INCREMENT,
         emp_id int,
         dept varchar(255),
         date TIMESTAMP,
-        start TIMESTAMP,
-        length TIMESTAMP,
+        start TIME,
+        length TIME,
         PRIMARY KEY(id),
-        FOREIGN KEY (empid) REFERENCES employees(empid) ON DELETE CASCADE ON UPDATE CASCADE);
+        FOREIGN KEY (emp_id) REFERENCES employees(empid) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (dept) REFERENCES departments(name) ON DELETE CASCADE ON UPDATE CASCADE);
 
 LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/schedule.csv'
-        INTO TABLE shifts
+        INTO TABLE schedule
         FIELDS TERMINATED BY ','
         OPTIONALLY ENCLOSED BY '"'
         LINES TERMINATED BY '\r\n'
-        IGNORE 1 ROWS (@col1, emp_id, dept, @col4, @col5)
-        SET date = STR_TO_DATE(@col1,'%m/%d/%Y'),
-            start = STR_TO_DATE(@col4,'%h%p'),
-            length = STR_TO_DATE(@col5,'%h');
+        IGNORE 1 LINES (@col1, @col2, @col3, @col4, @col5)
+        SET emp_id = @col2,
+            dept = @col3,
+            date=STR_TO_DATE(@col1,'%m/%d/%Y'),
+            start=STR_TO_DATE(@col4,'%h%p'),
+            length=STR_TO_DATE(@col5,'%H');
 
-CREATE TABLE employees_departments
-        (emp_id int,
-        dept_name varchar(255),
-        FOREIGN KEY (emp_id) REFERENCES employees(empid) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (dept_name) REFERENCES departments(name) ON DELETE CASCADE ON UPDATE CASCADE);
-
-CREATE TABLE rooms
-        (id int NOT NULL AUTO_INCREMENT,
-        floor int NOT NULL,
-        room_num int NOT NULL,
-        capacity int,
-        worker_num int,
-        PRIMARY KEY(id));
-
-CREATE TABLE rooms_departments
-        (room_id int,
-        dept_name varchar(255),
-        FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (dept_name) REFERENCES departments(name) ON DELETE CASCADE ON UPDATE CASCADE);
+ALTER TABLE schedule ADD COLUMN shift_num INT;
+ALTER TABLE schedule ADD CONSTRAINT FOREIGN KEY (shift_num) REFERENCES shifts(id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE schedule ADD COLUMN room INT;
