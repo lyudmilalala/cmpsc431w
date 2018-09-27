@@ -1,3 +1,4 @@
+CS431W Assignment5   Yuchen Sun   yus376   Section2 
 +====================================+
 |              SHOW TABLES           |
 +====================================+
@@ -210,8 +211,452 @@ Records: 434  Duplicates: 0  Warnings: 0
 +====================================+
 |    GENERATE THE FOLLOWING DATA     |
 +====================================+
-SELECT lastName, firstName, cellphone, DATE_FORMAT(shift_date,'%Y-%m-%d') AS 'date', dept AS 'department', DATE_FORMAT(start,'%h%p') AS 'start time', CONVERT(DATE_FORMAT(length,'%H'),UNSIGNED) AS 'shift length' FROM employees, schedules, shifts 
+/*
+can also get by output command 
+cse-p204inst22.cse.psu.edu 50% mysql -h cse-cmpsc431 -u yus376 -p --execute "SELECT lastName, firstName, cellphone, DATE_FORMAT(shift_date,'%Y-%m-%d') AS 'date', dept AS 'department', DATE_FORMAT(start,'%h%p') AS 'start time', CONVERT(DATE_FORMAT(length,'%H'),UNSIGNED) AS 'shift length' FROM yus376.employees, yus376.schedules, yus376.shifts WHERE schedules.emp_id=employees.empid AND schedules.shift_num=shifts.id ORDER BY lastName ASC, firstName ASC, shift_date ASC, start ASC" > /home/grads/yus376/CS431W/cmpsc431w/output.txt
+but because MYSQL give a more clean table format, we will print out the mysql result
+*/
+
+mysql> SELECT lastName, firstName, cellphone, DATE_FORMAT(shift_date,'%Y-%m-%d') AS 'date', dept AS 'department', DATE_FORMAT(start,'%h%p') AS 'start time', CONVERT(DATE_FORMAT(length,'%H'),UNSIGNED) AS 'shift length' FROM employees, schedules, shifts 
         WHERE schedules.emp_id=employees.empid AND schedules.shift_num=shifts.id 
         ORDER BY lastName ASC, firstName ASC, shift_date ASC, start ASC LIMIT 20;
-
++------------+-----------+----------------+------------+----------------+------------+--------------+
+| lastName   | firstName | cellphone      | date       | department     | start time | shift length |
++------------+-----------+----------------+------------+----------------+------------+--------------+
+| Ault       | Rosendo   | (571)7252-4785 | 2018-09-24 | CARDIOLOGY     | 03PM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-09-25 | PEDIATRICS     | 03PM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-09-25 | ONCOLOGY       | 03PM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-09-26 | PEDIATRICS     | 11PM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-09-28 | ONCOLOGY       | 03PM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-09-29 | CARDIOLOGY     | 07AM       |           12 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-10-01 | CARDIOLOGY     | 03PM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-10-02 | ONCOLOGY       | 03PM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-10-03 | PEDIATRICS     | 07AM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-10-04 | EMERGENCY      | 03PM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-10-04 | RADIOLOGY      | 11PM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-10-05 | EMERGENCY      | 03PM       |            8 |
+| Ault       | Rosendo   | (571)7252-4785 | 2018-10-07 | CARDIOLOGY     | 07PM       |           12 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-09-25 | EMERGENCY      | 07AM       |            8 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-09-25 | MATERNITY      | 03PM       |            8 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-09-26 | ONCOLOGY       | 07AM       |            8 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-09-26 | ONCOLOGY       | 07AM       |            8 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-09-26 | INTENSIVE CARE | 07AM       |            8 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-09-27 | PEDIATRICS     | 11PM       |            8 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-09-28 | CARDIOLOGY     | 07AM       |            8 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-10-02 | INTENSIVE CARE | 07AM       |            8 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-10-03 | PEDIATRICS     | 11PM       |            8 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-10-06 | RADIOLOGY      | 07AM       |           12 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-10-07 | EMERGENCY      | 07PM       |           12 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-10-07 | MATERNITY      | 07PM       |           12 |
+| Beaver     | Viva      | (612)7951-8931 | 2018-10-07 | PEDIATRICS     | 07PM       |           12 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-09-24 | EMERGENCY      | 07AM       |            8 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-09-28 | CARDIOLOGY     | 03PM       |            8 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-09-29 | CARDIOLOGY     | 07AM       |           12 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-10-03 | SURGERY        | 03PM       |            8 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-10-04 | EMERGENCY      | 03PM       |            8 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-10-04 | ONCOLOGY       | 11PM       |            8 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-10-04 | INTENSIVE CARE | 11PM       |            8 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-10-06 | ONCOLOGY       | 07AM       |           12 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-10-06 | MATERNITY      | 07AM       |           12 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-10-06 | PEDIATRICS     | 07AM       |           12 |
+| Berryman   | Sabrina   | (806)6465-4545 | 2018-10-07 | CARDIOLOGY     | 07AM       |           12 |
+| Blagg      | Lorenzo   | (863)2419-9105 | 2018-09-26 | EMERGENCY      | 07AM       |            8 |
+| Blagg      | Lorenzo   | (863)2419-9105 | 2018-09-27 | INTENSIVE CARE | 03PM       |            8 |
+| Blagg      | Lorenzo   | (863)2419-9105 | 2018-09-29 | SURGERY        | 07PM       |           12 |
+| Blagg      | Lorenzo   | (863)2419-9105 | 2018-10-01 | CARDIOLOGY     | 03PM       |            8 |
+| Blagg      | Lorenzo   | (863)2419-9105 | 2018-10-03 | ONCOLOGY       | 03PM       |            8 |
+| Blagg      | Lorenzo   | (863)2419-9105 | 2018-10-05 | ONCOLOGY       | 07AM       |            8 |
+| Blagg      | Lorenzo   | (863)2419-9105 | 2018-10-05 | RADIOLOGY      | 03PM       |            8 |
+| Blagg      | Lorenzo   | (863)2419-9105 | 2018-10-06 | ONCOLOGY       | 07PM       |           12 |
+| Blagg      | Lorenzo   | (863)2419-9105 | 2018-10-07 | ONCOLOGY       | 07PM       |           12 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-09-24 | PEDIATRICS     | 07AM       |            8 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-09-30 | ONCOLOGY       | 07PM       |           12 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-09-30 | EMERGENCY      | 07PM       |           12 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-10-01 | MATERNITY      | 03PM       |            8 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-10-02 | EMERGENCY      | 07AM       |            8 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-10-02 | SURGERY        | 03PM       |            8 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-10-02 | EMERGENCY      | 11PM       |            8 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-10-03 | CARDIOLOGY     | 11PM       |            8 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-10-04 | SURGERY        | 03PM       |            8 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-10-05 | SURGERY        | 07AM       |            8 |
+| Catanzaro  | Imelda    | (220)3748-1866 | 2018-10-06 | INTENSIVE CARE | 07PM       |           12 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-09-25 | EMERGENCY      | 03PM       |            8 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-09-25 | ONCOLOGY       | 11PM       |            8 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-09-26 | EMERGENCY      | 07AM       |            8 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-09-26 | CARDIOLOGY     | 11PM       |            8 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-09-27 | RADIOLOGY      | 03PM       |            8 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-09-27 | CARDIOLOGY     | 03PM       |            8 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-09-28 | ONCOLOGY       | 11PM       |            8 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-09-30 | EMERGENCY      | 07AM       |           12 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-09-30 | MATERNITY      | 07AM       |           12 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-09-30 | ONCOLOGY       | 07PM       |           12 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-10-02 | MATERNITY      | 11PM       |            8 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-10-03 | MATERNITY      | 03PM       |            8 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-10-05 | EMERGENCY      | 11PM       |            8 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-10-07 | EMERGENCY      | 07PM       |           12 |
+| Cermak     | Vern      | (138)7198-0862 | 2018-10-07 | EMERGENCY      | 07PM       |           12 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-09-24 | RADIOLOGY      | 03PM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-09-25 | RADIOLOGY      | 11PM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-09-27 | RADIOLOGY      | 03PM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-09-27 | SURGERY        | 11PM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-09-28 | MATERNITY      | 07AM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-09-29 | SURGERY        | 07AM       |           12 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-09-30 | CARDIOLOGY     | 07PM       |           12 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-10-01 | RADIOLOGY      | 07AM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-10-01 | RADIOLOGY      | 03PM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-10-01 | MATERNITY      | 03PM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-10-01 | SURGERY        | 11PM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-10-03 | CARDIOLOGY     | 03PM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-10-05 | RADIOLOGY      | 11PM       |            8 |
+| Clyburn    | Jeffry    | (420)7798-7220 | 2018-10-07 | SURGERY        | 07AM       |           12 |
+| Concannon  | Jeannette | (177)0601-0951 | 2018-10-01 | MATERNITY      | 03PM       |            8 |
+| Concannon  | Jeannette | (177)0601-0951 | 2018-10-01 | EMERGENCY      | 11PM       |            8 |
+| Concannon  | Jeannette | (177)0601-0951 | 2018-10-03 | ONCOLOGY       | 03PM       |            8 |
+| Concannon  | Jeannette | (177)0601-0951 | 2018-10-04 | RADIOLOGY      | 11PM       |            8 |
+| Concannon  | Jeannette | (177)0601-0951 | 2018-10-05 | PEDIATRICS     | 07AM       |            8 |
+| Concannon  | Jeannette | (177)0601-0951 | 2018-10-05 | PEDIATRICS     | 11PM       |            8 |
+| Crigger    | Maudie    | (460)4688-5945 | 2018-09-25 | PEDIATRICS     | 07AM       |            8 |
+| Crigger    | Maudie    | (460)4688-5945 | 2018-09-27 | ONCOLOGY       | 07AM       |            8 |
+| Crigger    | Maudie    | (460)4688-5945 | 2018-09-29 | RADIOLOGY      | 07PM       |           12 |
+| Crigger    | Maudie    | (460)4688-5945 | 2018-10-01 | SURGERY        | 07AM       |            8 |
+| Crigger    | Maudie    | (460)4688-5945 | 2018-10-01 | RADIOLOGY      | 11PM       |            8 |
+| Crigger    | Maudie    | (460)4688-5945 | 2018-10-03 | EMERGENCY      | 07AM       |            8 |
+| Crigger    | Maudie    | (460)4688-5945 | 2018-10-03 | INTENSIVE CARE | 03PM       |            8 |
+| Deines     | Pamella   | (701)1145-5661 | 2018-09-24 | INTENSIVE CARE | 07AM       |            8 |
+| Deines     | Pamella   | (701)1145-5661 | 2018-09-26 | EMERGENCY      | 11PM       |            8 |
+| Deines     | Pamella   | (701)1145-5661 | 2018-09-26 | SURGERY        | 11PM       |            8 |
+| Deines     | Pamella   | (701)1145-5661 | 2018-09-27 | SURGERY        | 11PM       |            8 |
+| Deines     | Pamella   | (701)1145-5661 | 2018-09-28 | PEDIATRICS     | 07AM       |            8 |
+| Deines     | Pamella   | (701)1145-5661 | 2018-09-28 | ONCOLOGY       | 07AM       |            8 |
+| Deines     | Pamella   | (701)1145-5661 | 2018-09-30 | SURGERY        | 07AM       |           12 |
+| Deines     | Pamella   | (701)1145-5661 | 2018-09-30 | MATERNITY      | 07PM       |           12 |
+| Deines     | Pamella   | (701)1145-5661 | 2018-10-05 | ONCOLOGY       | 07AM       |            8 |
+| Desouza    | Margery   | (869)0433-6907 | 2018-09-24 | SURGERY        | 03PM       |            8 |
+| Desouza    | Margery   | (869)0433-6907 | 2018-09-26 | CARDIOLOGY     | 11PM       |            8 |
+| Desouza    | Margery   | (869)0433-6907 | 2018-09-29 | RADIOLOGY      | 07PM       |           12 |
+| Desouza    | Margery   | (869)0433-6907 | 2018-10-02 | CARDIOLOGY     | 03PM       |            8 |
+| Desouza    | Margery   | (869)0433-6907 | 2018-10-03 | SURGERY        | 07AM       |            8 |
+| Desouza    | Margery   | (869)0433-6907 | 2018-10-04 | RADIOLOGY      | 11PM       |            8 |
+| Desouza    | Margery   | (869)0433-6907 | 2018-10-05 | PEDIATRICS     | 07AM       |            8 |
+| Desouza    | Margery   | (869)0433-6907 | 2018-10-06 | INTENSIVE CARE | 07PM       |           12 |
+| Ewell      | Madalyn   | (017)3957-5472 | 2018-09-24 | PEDIATRICS     | 03PM       |            8 |
+| Ewell      | Madalyn   | (017)3957-5472 | 2018-09-28 | CARDIOLOGY     | 11PM       |            8 |
+| Ewell      | Madalyn   | (017)3957-5472 | 2018-10-02 | PEDIATRICS     | 07AM       |            8 |
+| Ewell      | Madalyn   | (017)3957-5472 | 2018-10-04 | INTENSIVE CARE | 07AM       |            8 |
+| Ewell      | Madalyn   | (017)3957-5472 | 2018-10-06 | ONCOLOGY       | 07PM       |           12 |
+| Gabel      | Huong     | (594)6023-0061 | 2018-09-25 | MATERNITY      | 03PM       |            8 |
+| Gabel      | Huong     | (594)6023-0061 | 2018-09-25 | ONCOLOGY       | 11PM       |            8 |
+| Gabel      | Huong     | (594)6023-0061 | 2018-09-27 | PEDIATRICS     | 11PM       |            8 |
+| Gabel      | Huong     | (594)6023-0061 | 2018-10-01 | EMERGENCY      | 07AM       |            8 |
+| Gabel      | Huong     | (594)6023-0061 | 2018-10-01 | ONCOLOGY       | 11PM       |            8 |
+| Gabel      | Huong     | (594)6023-0061 | 2018-10-06 | CARDIOLOGY     | 07AM       |           12 |
+| Gabel      | Huong     | (594)6023-0061 | 2018-10-06 | SURGERY        | 07AM       |           12 |
+| Gabel      | Huong     | (594)6023-0061 | 2018-10-06 | MATERNITY      | 07PM       |           12 |
+| Goode      | Rex       | (392)8146-3039 | 2018-09-25 | ONCOLOGY       | 11PM       |            8 |
+| Goode      | Rex       | (392)8146-3039 | 2018-09-25 | SURGERY        | 11PM       |            8 |
+| Goode      | Rex       | (392)8146-3039 | 2018-09-26 | MATERNITY      | 07AM       |            8 |
+| Goode      | Rex       | (392)8146-3039 | 2018-09-26 | MATERNITY      | 03PM       |            8 |
+| Goode      | Rex       | (392)8146-3039 | 2018-09-28 | PEDIATRICS     | 03PM       |            8 |
+| Goode      | Rex       | (392)8146-3039 | 2018-09-30 | CARDIOLOGY     | 07AM       |           12 |
+| Goode      | Rex       | (392)8146-3039 | 2018-10-02 | RADIOLOGY      | 11PM       |            8 |
+| Goode      | Rex       | (392)8146-3039 | 2018-10-04 | SURGERY        | 11PM       |            8 |
+| Harps      | Gigi      | NULL           | 2018-09-29 | PEDIATRICS     | 07AM       |           12 |
+| Harps      | Gigi      | NULL           | 2018-09-30 | SURGERY        | 07AM       |           12 |
+| Harps      | Gigi      | NULL           | 2018-10-01 | SURGERY        | 07AM       |            8 |
+| Harps      | Gigi      | NULL           | 2018-10-03 | MATERNITY      | 03PM       |            8 |
+| Harps      | Gigi      | NULL           | 2018-10-03 | ONCOLOGY       | 11PM       |            8 |
+| Harps      | Gigi      | NULL           | 2018-10-07 | MATERNITY      | 07PM       |           12 |
+| Harwell    | Nadene    | (009)5996-2289 | 2018-09-25 | PEDIATRICS     | 03PM       |            8 |
+| Harwell    | Nadene    | (009)5996-2289 | 2018-09-25 | CARDIOLOGY     | 11PM       |            8 |
+| Harwell    | Nadene    | (009)5996-2289 | 2018-09-30 | PEDIATRICS     | 07AM       |           12 |
+| Harwell    | Nadene    | (009)5996-2289 | 2018-10-06 | MATERNITY      | 07PM       |           12 |
+| Harwell    | Nadene    | (009)5996-2289 | 2018-10-07 | RADIOLOGY      | 07PM       |           12 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-09-26 | MATERNITY      | 07AM       |            8 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-09-27 | PEDIATRICS     | 07AM       |            8 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-09-27 | MATERNITY      | 03PM       |            8 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-09-28 | PEDIATRICS     | 11PM       |            8 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-09-29 | ONCOLOGY       | 07PM       |           12 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-09-30 | ONCOLOGY       | 07PM       |           12 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-10-01 | EMERGENCY      | 11PM       |            8 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-10-02 | CARDIOLOGY     | 03PM       |            8 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-10-02 | PEDIATRICS     | 11PM       |            8 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-10-04 | INTENSIVE CARE | 11PM       |            8 |
+| Hauck      | Kenton    | (670)0980-0771 | 2018-10-06 | MATERNITY      | 07AM       |           12 |
+| He         | Kimiko    | (229)8178-0836 | 2018-09-25 | INTENSIVE CARE | 11PM       |            8 |
+| He         | Kimiko    | (229)8178-0836 | 2018-09-29 | PEDIATRICS     | 07AM       |           12 |
+| He         | Kimiko    | (229)8178-0836 | 2018-09-30 | CARDIOLOGY     | 07PM       |           12 |
+| He         | Kimiko    | (229)8178-0836 | 2018-10-02 | RADIOLOGY      | 03PM       |            8 |
+| He         | Kimiko    | (229)8178-0836 | 2018-10-04 | MATERNITY      | 07AM       |            8 |
+| He         | Kimiko    | (229)8178-0836 | 2018-10-05 | INTENSIVE CARE | 03PM       |            8 |
+| He         | Kimiko    | (229)8178-0836 | 2018-10-05 | SURGERY        | 11PM       |            8 |
+| He         | Kimiko    | (229)8178-0836 | 2018-10-07 | ONCOLOGY       | 07PM       |           12 |
+| Hessler    | Latina    | (082)5555-2237 | 2018-09-24 | SURGERY        | 07AM       |            8 |
+| Hessler    | Latina    | (082)5555-2237 | 2018-09-26 | RADIOLOGY      | 07AM       |            8 |
+| Hessler    | Latina    | (082)5555-2237 | 2018-09-27 | MATERNITY      | 11PM       |            8 |
+| Hessler    | Latina    | (082)5555-2237 | 2018-09-29 | INTENSIVE CARE | 07AM       |           12 |
+| Hessler    | Latina    | (082)5555-2237 | 2018-10-01 | INTENSIVE CARE | 03PM       |            8 |
+| Hessler    | Latina    | (082)5555-2237 | 2018-10-03 | SURGERY        | 03PM       |            8 |
+| Hessler    | Latina    | (082)5555-2237 | 2018-10-05 | INTENSIVE CARE | 07AM       |            8 |
+| Hessler    | Latina    | (082)5555-2237 | 2018-10-05 | PEDIATRICS     | 11PM       |            8 |
+| Hinze      | Mark      | (013)4803-9315 | 2018-09-24 | RADIOLOGY      | 03PM       |            8 |
+| Hinze      | Mark      | (013)4803-9315 | 2018-09-28 | PEDIATRICS     | 07AM       |            8 |
+| Hinze      | Mark      | (013)4803-9315 | 2018-09-28 | ONCOLOGY       | 03PM       |            8 |
+| Hinze      | Mark      | (013)4803-9315 | 2018-09-29 | RADIOLOGY      | 07AM       |           12 |
+| Hinze      | Mark      | (013)4803-9315 | 2018-09-30 | PEDIATRICS     | 07AM       |           12 |
+| Hinze      | Mark      | (013)4803-9315 | 2018-10-03 | INTENSIVE CARE | 03PM       |            8 |
+| Hinze      | Mark      | (013)4803-9315 | 2018-10-05 | INTENSIVE CARE | 07AM       |            8 |
+| Hinze      | Mark      | (013)4803-9315 | 2018-10-05 | MATERNITY      | 11PM       |            8 |
+| Hinze      | Mark      | (013)4803-9315 | 2018-10-07 | EMERGENCY      | 07AM       |           12 |
+| Hinze      | Mark      | (013)4803-9315 | 2018-10-07 | ONCOLOGY       | 07AM       |           12 |
+| Labarre    | Virgina   | (850)7730-3834 | 2018-09-24 | EMERGENCY      | 11PM       |            8 |
+| Labarre    | Virgina   | (850)7730-3834 | 2018-09-24 | SURGERY        | 11PM       |            8 |
+| Labarre    | Virgina   | (850)7730-3834 | 2018-09-25 | CARDIOLOGY     | 03PM       |            8 |
+| Labarre    | Virgina   | (850)7730-3834 | 2018-09-26 | EMERGENCY      | 03PM       |            8 |
+| Labarre    | Virgina   | (850)7730-3834 | 2018-10-01 | INTENSIVE CARE | 07AM       |            8 |
+| Labarre    | Virgina   | (850)7730-3834 | 2018-10-01 | PEDIATRICS     | 11PM       |            8 |
+| Labarre    | Virgina   | (850)7730-3834 | 2018-10-02 | EMERGENCY      | 11PM       |            8 |
+| Labarre    | Virgina   | (850)7730-3834 | 2018-10-04 | ONCOLOGY       | 11PM       |            8 |
+| Labarre    | Virgina   | (850)7730-3834 | 2018-10-06 | RADIOLOGY      | 07PM       |           12 |
+| Labarre    | Virgina   | (850)7730-3834 | 2018-10-07 | SURGERY        | 07PM       |           12 |
+| Liberto    | Delta     | (283)9948-9290 | 2018-09-24 | EMERGENCY      | 07AM       |            8 |
+| Liberto    | Delta     | (283)9948-9290 | 2018-09-24 | EMERGENCY      | 07AM       |            8 |
+| Liberto    | Delta     | (283)9948-9290 | 2018-09-26 | SURGERY        | 07AM       |            8 |
+| Liberto    | Delta     | (283)9948-9290 | 2018-09-26 | EMERGENCY      | 11PM       |            8 |
+| Liberto    | Delta     | (283)9948-9290 | 2018-09-28 | EMERGENCY      | 03PM       |            8 |
+| Liberto    | Delta     | (283)9948-9290 | 2018-10-02 | INTENSIVE CARE | 07AM       |            8 |
+| Liberto    | Delta     | (283)9948-9290 | 2018-10-02 | MATERNITY      | 07AM       |            8 |
+| Liberto    | Delta     | (283)9948-9290 | 2018-10-05 | PEDIATRICS     | 03PM       |            8 |
+| Liberto    | Delta     | (283)9948-9290 | 2018-10-06 | ONCOLOGY       | 07PM       |           12 |
+| Locke      | Remona    | (579)6658-7315 | 2018-09-24 | ONCOLOGY       | 07AM       |            8 |
+| Locke      | Remona    | (579)6658-7315 | 2018-09-25 | SURGERY        | 03PM       |            8 |
+| Locke      | Remona    | (579)6658-7315 | 2018-09-27 | INTENSIVE CARE | 03PM       |            8 |
+| Locke      | Remona    | (579)6658-7315 | 2018-09-28 | RADIOLOGY      | 03PM       |            8 |
+| Locke      | Remona    | (579)6658-7315 | 2018-09-29 | EMERGENCY      | 07PM       |           12 |
+| Locke      | Remona    | (579)6658-7315 | 2018-09-29 | INTENSIVE CARE | 07PM       |           12 |
+| Locke      | Remona    | (579)6658-7315 | 2018-10-01 | MATERNITY      | 03PM       |            8 |
+| Locke      | Remona    | (579)6658-7315 | 2018-10-02 | ONCOLOGY       | 03PM       |            8 |
+| Locke      | Remona    | (579)6658-7315 | 2018-10-04 | SURGERY        | 03PM       |            8 |
+| Locke      | Remona    | (579)6658-7315 | 2018-10-04 | EMERGENCY      | 03PM       |            8 |
+| Locke      | Remona    | (579)6658-7315 | 2018-10-05 | CARDIOLOGY     | 07AM       |            8 |
+| Locke      | Remona    | (579)6658-7315 | 2018-10-05 | SURGERY        | 07AM       |            8 |
+| Locke      | Remona    | (579)6658-7315 | 2018-10-06 | CARDIOLOGY     | 07AM       |           12 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-09-25 | MATERNITY      | 11PM       |            8 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-09-25 | ONCOLOGY       | 11PM       |            8 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-09-29 | EMERGENCY      | 07AM       |           12 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-10-02 | MATERNITY      | 07AM       |            8 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-10-02 | RADIOLOGY      | 03PM       |            8 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-10-03 | MATERNITY      | 11PM       |            8 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-10-03 | EMERGENCY      | 11PM       |            8 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-10-04 | RADIOLOGY      | 07AM       |            8 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-10-06 | MATERNITY      | 07PM       |           12 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-10-06 | INTENSIVE CARE | 07PM       |           12 |
+| Loranger   | Junita    | (734)3149-1859 | 2018-10-07 | CARDIOLOGY     | 07AM       |           12 |
+| Mcclelland | Barton    | NULL           | 2018-09-24 | RADIOLOGY      | 03PM       |            8 |
+| Mcclelland | Barton    | NULL           | 2018-09-27 | PEDIATRICS     | 07AM       |            8 |
+| Mcclelland | Barton    | NULL           | 2018-09-29 | ONCOLOGY       | 07AM       |           12 |
+| Mcclelland | Barton    | NULL           | 2018-09-29 | EMERGENCY      | 07PM       |           12 |
+| Mcclelland | Barton    | NULL           | 2018-09-29 | INTENSIVE CARE | 07PM       |           12 |
+| Mcclelland | Barton    | NULL           | 2018-10-01 | PEDIATRICS     | 03PM       |            8 |
+| Mcclelland | Barton    | NULL           | 2018-10-02 | RADIOLOGY      | 07AM       |            8 |
+| Mcclelland | Barton    | NULL           | 2018-10-04 | CARDIOLOGY     | 11PM       |            8 |
+| Mcclelland | Barton    | NULL           | 2018-10-05 | EMERGENCY      | 03PM       |            8 |
+| Mcclelland | Barton    | NULL           | 2018-10-05 | SURGERY        | 11PM       |            8 |
+| Mersch     | Carmel    | (327)6635-0934 | 2018-09-25 | EMERGENCY      | 03PM       |            8 |
+| Mersch     | Carmel    | (327)6635-0934 | 2018-09-27 | SURGERY        | 11PM       |            8 |
+| Mersch     | Carmel    | (327)6635-0934 | 2018-09-28 | RADIOLOGY      | 11PM       |            8 |
+| Mersch     | Carmel    | (327)6635-0934 | 2018-09-29 | MATERNITY      | 07PM       |           12 |
+| Mersch     | Carmel    | (327)6635-0934 | 2018-10-04 | ONCOLOGY       | 11PM       |            8 |
+| Mersch     | Carmel    | (327)6635-0934 | 2018-10-05 | EMERGENCY      | 07AM       |            8 |
+| Mullally   | Vennie    | (636)8932-9613 | 2018-09-26 | CARDIOLOGY     | 07AM       |            8 |
+| Mullally   | Vennie    | (636)8932-9613 | 2018-09-27 | PEDIATRICS     | 07AM       |            8 |
+| Mullally   | Vennie    | (636)8932-9613 | 2018-09-27 | ONCOLOGY       | 03PM       |            8 |
+| Mullally   | Vennie    | (636)8932-9613 | 2018-09-29 | INTENSIVE CARE | 07AM       |           12 |
+| Mullally   | Vennie    | (636)8932-9613 | 2018-09-29 | CARDIOLOGY     | 07PM       |           12 |
+| Mullally   | Vennie    | (636)8932-9613 | 2018-10-01 | RADIOLOGY      | 03PM       |            8 |
+| Mullally   | Vennie    | (636)8932-9613 | 2018-10-01 | RADIOLOGY      | 11PM       |            8 |
+| Mumaw      | Marylin   | (374)2407-1736 | 2018-09-27 | SURGERY        | 07AM       |            8 |
+| Mumaw      | Marylin   | (374)2407-1736 | 2018-09-29 | CARDIOLOGY     | 07AM       |           12 |
+| Mumaw      | Marylin   | (374)2407-1736 | 2018-09-30 | ONCOLOGY       | 07AM       |           12 |
+| Mumaw      | Marylin   | (374)2407-1736 | 2018-09-30 | ONCOLOGY       | 07PM       |           12 |
+| Mumaw      | Marylin   | (374)2407-1736 | 2018-10-02 | EMERGENCY      | 03PM       |            8 |
+| Mumaw      | Marylin   | (374)2407-1736 | 2018-10-04 | PEDIATRICS     | 07AM       |            8 |
+| Mumaw      | Marylin   | (374)2407-1736 | 2018-10-06 | INTENSIVE CARE | 07PM       |           12 |
+| Mumaw      | Marylin   | (374)2407-1736 | 2018-10-07 | CARDIOLOGY     | 07PM       |           12 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-09-26 | ONCOLOGY       | 07AM       |            8 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-09-28 | MATERNITY      | 03PM       |            8 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-09-29 | SURGERY        | 07AM       |           12 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-09-29 | ONCOLOGY       | 07AM       |           12 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-09-29 | RADIOLOGY      | 07PM       |           12 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-09-30 | MATERNITY      | 07AM       |           12 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-10-04 | RADIOLOGY      | 03PM       |            8 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-10-05 | ONCOLOGY       | 03PM       |            8 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-10-05 | PEDIATRICS     | 11PM       |            8 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-10-06 | EMERGENCY      | 07PM       |           12 |
+| Nalley     | Charlott  | (649)5500-9954 | 2018-10-07 | RADIOLOGY      | 07AM       |           12 |
+| Netter     | Almeda    | (577)9992-5820 | 2018-09-27 | EMERGENCY      | 03PM       |            8 |
+| Netter     | Almeda    | (577)9992-5820 | 2018-09-28 | EMERGENCY      | 07AM       |            8 |
+| Netter     | Almeda    | (577)9992-5820 | 2018-10-02 | CARDIOLOGY     | 03PM       |            8 |
+| Netter     | Almeda    | (577)9992-5820 | 2018-10-03 | ONCOLOGY       | 07AM       |            8 |
+| Netter     | Almeda    | (577)9992-5820 | 2018-10-03 | INTENSIVE CARE | 07AM       |            8 |
+| Netter     | Almeda    | (577)9992-5820 | 2018-10-04 | EMERGENCY      | 03PM       |            8 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-09-25 | INTENSIVE CARE | 07AM       |            8 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-09-25 | MATERNITY      | 07AM       |            8 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-09-27 | CARDIOLOGY     | 07AM       |            8 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-09-27 | MATERNITY      | 03PM       |            8 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-09-28 | RADIOLOGY      | 07AM       |            8 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-09-28 | RADIOLOGY      | 07AM       |            8 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-09-30 | INTENSIVE CARE | 07PM       |           12 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-10-02 | CARDIOLOGY     | 03PM       |            8 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-10-03 | EMERGENCY      | 11PM       |            8 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-10-05 | ONCOLOGY       | 07AM       |            8 |
+| Noonkester | Asa       | (175)3537-5067 | 2018-10-07 | ONCOLOGY       | 07AM       |           12 |
+| Ober       | Shalanda  | (210)1508-8132 | 2018-09-24 | CARDIOLOGY     | 03PM       |            8 |
+| Ober       | Shalanda  | (210)1508-8132 | 2018-09-25 | INTENSIVE CARE | 07AM       |            8 |
+| Ober       | Shalanda  | (210)1508-8132 | 2018-09-28 | EMERGENCY      | 07AM       |            8 |
+| Ober       | Shalanda  | (210)1508-8132 | 2018-09-29 | PEDIATRICS     | 07PM       |           12 |
+| Ober       | Shalanda  | (210)1508-8132 | 2018-09-30 | CARDIOLOGY     | 07PM       |           12 |
+| Ober       | Shalanda  | (210)1508-8132 | 2018-09-30 | CARDIOLOGY     | 07PM       |           12 |
+| Ober       | Shalanda  | (210)1508-8132 | 2018-10-01 | EMERGENCY      | 07AM       |            8 |
+| Ober       | Shalanda  | (210)1508-8132 | 2018-10-02 | ONCOLOGY       | 11PM       |            8 |
+| Ober       | Shalanda  | (210)1508-8132 | 2018-10-03 | INTENSIVE CARE | 11PM       |            8 |
+| Ober       | Shalanda  | (210)1508-8132 | 2018-10-06 | MATERNITY      | 07PM       |           12 |
+| Paille     | Lorilee   | (858)1100-2722 | 2018-09-25 | INTENSIVE CARE | 03PM       |            8 |
+| Paille     | Lorilee   | (858)1100-2722 | 2018-09-26 | SURGERY        | 11PM       |            8 |
+| Paille     | Lorilee   | (858)1100-2722 | 2018-09-28 | SURGERY        | 03PM       |            8 |
+| Paille     | Lorilee   | (858)1100-2722 | 2018-10-02 | CARDIOLOGY     | 03PM       |            8 |
+| Paille     | Lorilee   | (858)1100-2722 | 2018-10-03 | EMERGENCY      | 11PM       |            8 |
+| Paille     | Lorilee   | (858)1100-2722 | 2018-10-04 | EMERGENCY      | 11PM       |            8 |
+| Paille     | Lorilee   | (858)1100-2722 | 2018-10-06 | ONCOLOGY       | 07AM       |           12 |
+| Paille     | Lorilee   | (858)1100-2722 | 2018-10-07 | RADIOLOGY      | 07AM       |           12 |
+| Palm       | Dorie     | (778)4897-0071 | 2018-09-24 | MATERNITY      | 07AM       |            8 |
+| Palm       | Dorie     | (778)4897-0071 | 2018-09-30 | MATERNITY      | 07PM       |           12 |
+| Palm       | Dorie     | (778)4897-0071 | 2018-10-01 | CARDIOLOGY     | 07AM       |            8 |
+| Palm       | Dorie     | (778)4897-0071 | 2018-10-04 | RADIOLOGY      | 03PM       |            8 |
+| Palm       | Dorie     | (778)4897-0071 | 2018-10-06 | PEDIATRICS     | 07AM       |           12 |
+| Palm       | Dorie     | (778)4897-0071 | 2018-10-07 | CARDIOLOGY     | 07AM       |           12 |
+| Partin     | Leigha    | (976)6535-0004 | 2018-09-26 | EMERGENCY      | 11PM       |            8 |
+| Partin     | Leigha    | (976)6535-0004 | 2018-10-04 | RADIOLOGY      | 11PM       |            8 |
+| Partin     | Leigha    | (976)6535-0004 | 2018-10-06 | MATERNITY      | 07AM       |           12 |
+| Patz       | Kelsi     | NULL           | 2018-09-26 | MATERNITY      | 07AM       |            8 |
+| Patz       | Kelsi     | NULL           | 2018-09-27 | EMERGENCY      | 03PM       |            8 |
+| Patz       | Kelsi     | NULL           | 2018-09-28 | MATERNITY      | 11PM       |            8 |
+| Patz       | Kelsi     | NULL           | 2018-09-30 | RADIOLOGY      | 07PM       |           12 |
+| Patz       | Kelsi     | NULL           | 2018-10-02 | CARDIOLOGY     | 11PM       |            8 |
+| Patz       | Kelsi     | NULL           | 2018-10-03 | RADIOLOGY      | 11PM       |            8 |
+| Patz       | Kelsi     | NULL           | 2018-10-04 | SURGERY        | 11PM       |            8 |
+| Patz       | Kelsi     | NULL           | 2018-10-07 | MATERNITY      | 07PM       |           12 |
+| Perrino    | Casandra  | (139)2358-8977 | 2018-09-26 | RADIOLOGY      | 03PM       |            8 |
+| Perrino    | Casandra  | (139)2358-8977 | 2018-09-27 | PEDIATRICS     | 03PM       |            8 |
+| Perrino    | Casandra  | (139)2358-8977 | 2018-10-07 | CARDIOLOGY     | 07PM       |           12 |
+| Petties    | Rachelle  | (673)3119-4524 | 2018-09-26 | RADIOLOGY      | 07AM       |            8 |
+| Petties    | Rachelle  | (673)3119-4524 | 2018-09-28 | CARDIOLOGY     | 07AM       |            8 |
+| Petties    | Rachelle  | (673)3119-4524 | 2018-09-28 | EMERGENCY      | 07AM       |            8 |
+| Petties    | Rachelle  | (673)3119-4524 | 2018-09-29 | INTENSIVE CARE | 07AM       |           12 |
+| Petties    | Rachelle  | (673)3119-4524 | 2018-09-30 | MATERNITY      | 07AM       |           12 |
+| Petties    | Rachelle  | (673)3119-4524 | 2018-10-01 | EMERGENCY      | 03PM       |            8 |
+| Petties    | Rachelle  | (673)3119-4524 | 2018-10-06 | RADIOLOGY      | 07PM       |           12 |
+| Probert    | Rubye     | (021)0487-5643 | 2018-09-24 | ONCOLOGY       | 03PM       |            8 |
+| Probert    | Rubye     | (021)0487-5643 | 2018-09-26 | PEDIATRICS     | 07AM       |            8 |
+| Probert    | Rubye     | (021)0487-5643 | 2018-09-28 | CARDIOLOGY     | 03PM       |            8 |
+| Probert    | Rubye     | (021)0487-5643 | 2018-09-30 | PEDIATRICS     | 07AM       |           12 |
+| Probert    | Rubye     | (021)0487-5643 | 2018-10-02 | RADIOLOGY      | 03PM       |            8 |
+| Probert    | Rubye     | (021)0487-5643 | 2018-10-03 | SURGERY        | 07AM       |            8 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-09-24 | RADIOLOGY      | 11PM       |            8 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-09-27 | CARDIOLOGY     | 07AM       |            8 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-09-29 | RADIOLOGY      | 07AM       |           12 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-09-30 | EMERGENCY      | 07AM       |           12 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-09-30 | MATERNITY      | 07AM       |           12 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-10-01 | CARDIOLOGY     | 07AM       |            8 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-10-01 | RADIOLOGY      | 11PM       |            8 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-10-04 | SURGERY        | 03PM       |            8 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-10-05 | INTENSIVE CARE | 07AM       |            8 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-10-05 | MATERNITY      | 11PM       |            8 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-10-06 | ONCOLOGY       | 07PM       |           12 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-10-07 | RADIOLOGY      | 07PM       |           12 |
+| Pye        | Deanna    | (667)1285-0361 | 2018-10-07 | INTENSIVE CARE | 07PM       |           12 |
+| Quarles    | Timmy     | (513)2756-9892 | 2018-09-25 | CARDIOLOGY     | 07AM       |            8 |
+| Quarles    | Timmy     | (513)2756-9892 | 2018-09-27 | ONCOLOGY       | 07AM       |            8 |
+| Quarles    | Timmy     | (513)2756-9892 | 2018-09-28 | CARDIOLOGY     | 07AM       |            8 |
+| Quarles    | Timmy     | (513)2756-9892 | 2018-09-30 | RADIOLOGY      | 07AM       |           12 |
+| Quarles    | Timmy     | (513)2756-9892 | 2018-10-02 | MATERNITY      | 07AM       |            8 |
+| Quarles    | Timmy     | (513)2756-9892 | 2018-10-02 | INTENSIVE CARE | 11PM       |            8 |
+| Quarles    | Timmy     | (513)2756-9892 | 2018-10-03 | EMERGENCY      | 07AM       |            8 |
+| Quarles    | Timmy     | (513)2756-9892 | 2018-10-06 | PEDIATRICS     | 07PM       |           12 |
+| Rabb       | Stephan   | (834)8696-0576 | 2018-09-24 | INTENSIVE CARE | 11PM       |            8 |
+| Rabb       | Stephan   | (834)8696-0576 | 2018-09-24 | ONCOLOGY       | 11PM       |            8 |
+| Rabb       | Stephan   | (834)8696-0576 | 2018-09-25 | MATERNITY      | 11PM       |            8 |
+| Rabb       | Stephan   | (834)8696-0576 | 2018-09-26 | SURGERY        | 11PM       |            8 |
+| Rabb       | Stephan   | (834)8696-0576 | 2018-10-05 | RADIOLOGY      | 03PM       |            8 |
+| Sisk       | Ernesto   | (090)2314-3403 | 2018-09-27 | RADIOLOGY      | 03PM       |            8 |
+| Sisk       | Ernesto   | (090)2314-3403 | 2018-09-28 | RADIOLOGY      | 07AM       |            8 |
+| Sisk       | Ernesto   | (090)2314-3403 | 2018-09-28 | EMERGENCY      | 11PM       |            8 |
+| Sisk       | Ernesto   | (090)2314-3403 | 2018-09-30 | CARDIOLOGY     | 07PM       |           12 |
+| Sisk       | Ernesto   | (090)2314-3403 | 2018-10-06 | MATERNITY      | 07PM       |           12 |
+| Sisk       | Ernesto   | (090)2314-3403 | 2018-10-07 | MATERNITY      | 07PM       |           12 |
+| Spies      | Shera     | (863)0328-8713 | 2018-09-24 | CARDIOLOGY     | 07AM       |            8 |
+| Spies      | Shera     | (863)0328-8713 | 2018-09-25 | CARDIOLOGY     | 03PM       |            8 |
+| Spies      | Shera     | (863)0328-8713 | 2018-09-26 | SURGERY        | 07AM       |            8 |
+| Spies      | Shera     | (863)0328-8713 | 2018-09-28 | ONCOLOGY       | 07AM       |            8 |
+| Spies      | Shera     | (863)0328-8713 | 2018-10-01 | ONCOLOGY       | 07AM       |            8 |
+| Spies      | Shera     | (863)0328-8713 | 2018-10-03 | RADIOLOGY      | 07AM       |            8 |
+| Spies      | Shera     | (863)0328-8713 | 2018-10-04 | CARDIOLOGY     | 03PM       |            8 |
+| Spies      | Shera     | (863)0328-8713 | 2018-10-06 | RADIOLOGY      | 07AM       |           12 |
+| Stager     | Roderick  | (943)0469-0543 | 2018-09-24 | ONCOLOGY       | 03PM       |            8 |
+| Stager     | Roderick  | (943)0469-0543 | 2018-09-26 | CARDIOLOGY     | 07AM       |            8 |
+| Stager     | Roderick  | (943)0469-0543 | 2018-09-28 | PEDIATRICS     | 03PM       |            8 |
+| Stager     | Roderick  | (943)0469-0543 | 2018-09-29 | ONCOLOGY       | 07PM       |           12 |
+| Stager     | Roderick  | (943)0469-0543 | 2018-09-30 | PEDIATRICS     | 07PM       |           12 |
+| Stager     | Roderick  | (943)0469-0543 | 2018-10-01 | EMERGENCY      | 11PM       |            8 |
+| Stager     | Roderick  | (943)0469-0543 | 2018-10-04 | ONCOLOGY       | 07AM       |            8 |
+| Stager     | Roderick  | (943)0469-0543 | 2018-10-04 | CARDIOLOGY     | 11PM       |            8 |
+| Stager     | Roderick  | (943)0469-0543 | 2018-10-07 | EMERGENCY      | 07AM       |           12 |
+| Stager     | Roderick  | (943)0469-0543 | 2018-10-07 | PEDIATRICS     | 07PM       |           12 |
+| Swallow    | Oralia    | (141)8662-6336 | 2018-09-24 | SURGERY        | 07AM       |            8 |
+| Swallow    | Oralia    | (141)8662-6336 | 2018-09-24 | MATERNITY      | 03PM       |            8 |
+| Swallow    | Oralia    | (141)8662-6336 | 2018-09-25 | EMERGENCY      | 07AM       |            8 |
+| Swallow    | Oralia    | (141)8662-6336 | 2018-09-26 | INTENSIVE CARE | 11PM       |            8 |
+| Swallow    | Oralia    | (141)8662-6336 | 2018-10-01 | PEDIATRICS     | 11PM       |            8 |
+| Swallow    | Oralia    | (141)8662-6336 | 2018-10-02 | SURGERY        | 07AM       |            8 |
+| Swallow    | Oralia    | (141)8662-6336 | 2018-10-03 | MATERNITY      | 07AM       |            8 |
+| Swallow    | Oralia    | (141)8662-6336 | 2018-10-03 | SURGERY        | 11PM       |            8 |
+| Swallow    | Oralia    | (141)8662-6336 | 2018-10-07 | ONCOLOGY       | 07AM       |           12 |
+| Swallow    | Oralia    | (141)8662-6336 | 2018-10-07 | ONCOLOGY       | 07PM       |           12 |
+| Warn       | Loraine   | (390)2682-4217 | 2018-09-24 | PEDIATRICS     | 03PM       |            8 |
+| Warn       | Loraine   | (390)2682-4217 | 2018-09-27 | INTENSIVE CARE | 07AM       |            8 |
+| Warn       | Loraine   | (390)2682-4217 | 2018-09-27 | RADIOLOGY      | 03PM       |            8 |
+| Warn       | Loraine   | (390)2682-4217 | 2018-09-30 | RADIOLOGY      | 07PM       |           12 |
+| Warn       | Loraine   | (390)2682-4217 | 2018-10-05 | CARDIOLOGY     | 11PM       |            8 |
+| Warn       | Loraine   | (390)2682-4217 | 2018-10-07 | CARDIOLOGY     | 07PM       |           12 |
+| Whitmarsh  | Mikel     | (754)5317-0529 | 2018-09-24 | RADIOLOGY      | 11PM       |            8 |
+| Whitmarsh  | Mikel     | (754)5317-0529 | 2018-09-24 | RADIOLOGY      | 11PM       |            8 |
+| Whitmarsh  | Mikel     | (754)5317-0529 | 2018-09-26 | PEDIATRICS     | 07AM       |            8 |
+| Whitmarsh  | Mikel     | (754)5317-0529 | 2018-09-27 | ONCOLOGY       | 03PM       |            8 |
+| Whitmarsh  | Mikel     | (754)5317-0529 | 2018-09-29 | MATERNITY      | 07PM       |           12 |
+| Whitmarsh  | Mikel     | (754)5317-0529 | 2018-09-30 | ONCOLOGY       | 07AM       |           12 |
+| Whitmarsh  | Mikel     | (754)5317-0529 | 2018-10-01 | INTENSIVE CARE | 03PM       |            8 |
+| Whitmarsh  | Mikel     | (754)5317-0529 | 2018-10-06 | RADIOLOGY      | 07PM       |           12 |
+| Witham     | Colby     | (818)7106-4594 | 2018-09-24 | SURGERY        | 03PM       |            8 |
+| Witham     | Colby     | (818)7106-4594 | 2018-09-24 | ONCOLOGY       | 03PM       |            8 |
+| Witham     | Colby     | (818)7106-4594 | 2018-09-25 | CARDIOLOGY     | 03PM       |            8 |
+| Witham     | Colby     | (818)7106-4594 | 2018-09-25 | INTENSIVE CARE | 11PM       |            8 |
+| Witham     | Colby     | (818)7106-4594 | 2018-09-26 | SURGERY        | 11PM       |            8 |
+| Witham     | Colby     | (818)7106-4594 | 2018-09-29 | MATERNITY      | 07AM       |           12 |
+| Witham     | Colby     | (818)7106-4594 | 2018-10-02 | PEDIATRICS     | 03PM       |            8 |
+| Witham     | Colby     | (818)7106-4594 | 2018-10-03 | SURGERY        | 07AM       |            8 |
+| Witham     | Colby     | (818)7106-4594 | 2018-10-03 | MATERNITY      | 07AM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-09-24 | ONCOLOGY       | 11PM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-09-25 | SURGERY        | 11PM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-09-27 | ONCOLOGY       | 07AM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-09-27 | PEDIATRICS     | 11PM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-09-28 | SURGERY        | 03PM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-09-29 | RADIOLOGY      | 07PM       |           12 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-10-02 | INTENSIVE CARE | 03PM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-10-03 | ONCOLOGY       | 11PM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-10-04 | INTENSIVE CARE | 07AM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-10-04 | PEDIATRICS     | 03PM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-10-05 | INTENSIVE CARE | 07AM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-10-05 | PEDIATRICS     | 03PM       |            8 |
+| Zaragoza   | Manie     | (394)2952-7760 | 2018-10-06 | RADIOLOGY      | 07AM       |           12 |
++------------+-----------+----------------+------------+----------------+------------+--------------+
+434 rows in set (0.03 sec)
 
