@@ -1,84 +1,217 @@
-DROP TABLE IF EXISTS 'employees';
-DROP TABLE IF EXISTS 'departments';
-DROP TABLE IF EXISTS 'shifts';
-DROP TABLE IF EXISTS 'schedule';
++====================================+
+|              SHOW TABLES           |
++====================================+
 
-CREATE TABLE employees
-        (empid int NOT NULL,
-        lastName varchar(255) NOT NULL,
-        firstName varchar(255) NOT NULL,
-        emptype varchar(255),
-        cellphone varchar(255),
-        homephone varchar(255),
-        ftpt varchar(10) CHECK (ftpt IN ('FT', 'PT')),
-        PRIMARY KEY (empid));
+mysql> show tables;
++------------------+
+| Tables_in_yus376 |
++------------------+
+| departments      |
+| employees        |
+| rooms            |
+| schedules        |
+| shifts           |
++------------------+
+5 rows in set (0.00 sec)
 
-LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/employees.csv'
-        INTO TABLE employees
-        FIELDS TERMINATED BY ','
-        OPTIONALLY ENCLOSED BY '"'
-        LINES TERMINATED BY '\r\n'
-        IGNORE 1 LINES;
++====================================+
+|            DESCRIBE TABLES         |
++====================================+
 
-UPDATE employees SET cellphone=NULL WHERE cellphone='(none)';
-UPDATE employees SET homephone=NULL WHERE homephone='(none)';
+mysql> describe employees;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| empid     | int(11)      | NO   | PRI | NULL    |       |
+| lastName  | varchar(255) | NO   |     | NULL    |       |
+| firstName | varchar(255) | NO   |     | NULL    |       |
+| emptype   | varchar(255) | YES  |     | NULL    |       |
+| cellphone | varchar(255) | YES  |     | NULL    |       |
+| homephone | varchar(255) | YES  |     | NULL    |       |
+| ftpt      | varchar(10)  | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
 
-CREATE TABLE departments
-        (name varchar(255) NOT NULL,
-        description varchar(255),
-        PRIMARY KEY (name));
+mysql> describe departments;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| name        | varchar(255) | NO   | PRI | NULL    |       |
+| description | varchar(255) | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
 
-LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/departments.csv'
-        INTO TABLE depdartments
-        FIELDS TERMINATED BY ','
-        OPTIONALLY ENCLOSED BY '"'
-        LINES TERMINATED BY '\r\n'
-        IGNORE 1 LINES (name);
+mysql> describe rooms;
++------------+---------+------+-----+---------+----------------+
+| Field      | Type    | Null | Key | Default | Extra          |
++------------+---------+------+-----+---------+----------------+
+| id         | int(11) | NO   | PRI | NULL    | auto_increment |
+| floor      | int(11) | NO   |     | NULL    |                |
+| room_num   | int(11) | NO   |     | NULL    |                |
+| capacity   | int(11) | YES  |     | NULL    |                |
+| worker_num | int(11) | YES  |     | NULL    |                |
++------------+---------+------+-----+---------+----------------+
+5 rows in set (0.01 sec)
 
-CREATE TABLE shifts
-        (id int NOT NULL AUTO_INCREMENT,
-        start TIME,
-        length TIME,
-        PRIMARY KEY(id));
+mysql> describe shifts;
++--------+---------+------+-----+---------+----------------+
+| Field  | Type    | Null | Key | Default | Extra          |
++--------+---------+------+-----+---------+----------------+
+| id     | int(11) | NO   | PRI | NULL    | auto_increment |
+| start  | time    | NO   |     | NULL    |                |
+| length | time    | NO   |     | NULL    |                |
++--------+---------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
 
-LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/shifts.csv'
-        INTO TABLE shifts
-        FIELDS TERMINATED BY ','
-        OPTIONALLY ENCLOSED BY '"'
-        LINES TERMINATED BY '\r\n'
-        IGNORE 1 LINES (@col1, @col2)
-        SET start=STR_TO_DATE(@col1,'%h%p'),
-            length=STR_TO_DATE(@col2,'%H');
+mysql> describe schedules;
++-----------+--------------+------+-----+-------------------+-----------------------------+
+| Field     | Type         | Null | Key | Default           | Extra                       |
++-----------+--------------+------+-----+-------------------+-----------------------------+
+| id        | int(11)      | NO   | PRI | NULL              | auto_increment              |
+| emp_id    | int(11)      | YES  | MUL | NULL              |                             |
+| dept      | varchar(255) | YES  | MUL | NULL              |                             |
+| date      | timestamp    | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+| room      | int(11)      | YES  | MUL | NULL              |                             |
+| shift_num | int(11)      | YES  | MUL | NULL              |                             |
++-----------+--------------+------+-----+-------------------+-----------------------------+
+6 rows in set (0.00 sec)
 
-/*
-back to strings
-SELECT DATE_FORMAT(start,'%h%p') FROM shifts;
-SELECT CONVERT(DATE_FORMAT(length,'%H'),UNSIGNED) FROM shifts;
-*/
++====================================+
+|           IMPORT THE DATA          |
++====================================+
+mysql> DROP TABLE IF EXISTS employees;
+Query OK, 0 rows affected (0.00 sec)
 
-CREATE TABLE schedule
-        (id int NOT NULL AUTO_INCREMENT,
-        emp_id int,
-        dept varchar(255),
-        date TIMESTAMP,
-        start TIME,
-        length TIME,
-        PRIMARY KEY(id),
-        FOREIGN KEY (emp_id) REFERENCES employees(empid) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (dept) REFERENCES departments(name) ON DELETE CASCADE ON UPDATE CASCADE);
+mysql> DROP TABLE IF EXISTS departments;
+Query OK, 0 rows affected (0.00 sec)
 
-LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/schedule.csv'
-        INTO TABLE schedule
-        FIELDS TERMINATED BY ','
-        OPTIONALLY ENCLOSED BY '"'
-        LINES TERMINATED BY '\r\n'
-        IGNORE 1 LINES (@col1, @col2, @col3, @col4, @col5)
-        SET emp_id = @col2,
-            dept = @col3,
-            date=STR_TO_DATE(@col1,'%m/%d/%Y'),
-            start=STR_TO_DATE(@col4,'%h%p'),
-            length=STR_TO_DATE(@col5,'%H');
+mysql> DROP TABLE IF EXISTS shifts;
+Query OK, 0 rows affected (0.00 sec)
 
-ALTER TABLE schedule ADD COLUMN shift_num INT;
-ALTER TABLE schedule ADD CONSTRAINT FOREIGN KEY (shift_num) REFERENCES shifts(id) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE schedule ADD COLUMN room INT;
+mysql> DROP TABLE IF EXISTS schedules;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CREATE TABLE employees
+    ->         (empid int NOT NULL,
+    ->         lastName varchar(255) NOT NULL,
+    ->         firstName varchar(255) NOT NULL,
+    ->         emptype varchar(255),
+    ->         cellphone varchar(255),
+    ->         homephone varchar(255),
+    ->         ftpt varchar(10) CHECK (ftpt IN ('FT', 'PT')),
+    ->         PRIMARY KEY (empid));
+Query OK, 0 rows affected (0.03 sec)
+mysql> LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/employees.csv'
+    ->         INTO TABLE employees
+    ->         FIELDS TERMINATED BY ','
+    ->         OPTIONALLY ENCLOSED BY '"'
+    ->         LINES TERMINATED BY '\r\n'
+    ->         IGNORE 1 LINES;
+Query OK, 50 rows affected (0.03 sec)
+Records: 50  Deleted: 0  Skipped: 0  Warnings: 0
+
+mysql> CREATE TABLE departments
+    ->         (name varchar(255) NOT NULL,
+    ->         description varchar(255),
+    ->         PRIMARY KEY (name));
+Query OK, 0 rows affected (0.02 sec)
+mysql> LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/departments.csv'
+    ->         INTO TABLE departments
+    ->         FIELDS TERMINATED BY ','
+    ->         OPTIONALLY ENCLOSED BY '"'
+    ->         LINES TERMINATED BY '\r\n'
+    ->         IGNORE 1 LINES (name);
+Query OK, 8 rows affected (0.01 sec)
+Records: 8  Deleted: 0  Skipped: 0  Warnings: 0
+
+mysql> CREATE TABLE shifts
+    ->         (id int NOT NULL AUTO_INCREMENT,
+    ->         start TIME NOT NULL,
+    ->         length TIME NOT NULL,
+    ->         PRIMARY KEY(id));
+Query OK, 0 rows affected (0.03 sec)
+mysql> LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/shifts.csv'
+    ->         INTO TABLE shifts
+    ->         FIELDS TERMINATED BY ','
+    ->         OPTIONALLY ENCLOSED BY '"'
+    ->         LINES TERMINATED BY '\r\n'
+    ->         IGNORE 1 LINES (@col1, @col2)
+    ->         SET start=STR_TO_DATE(@col1,'%h%p'),
+    ->             length=STR_TO_DATE(@col2,'%H');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Deleted: 0  Skipped: 0  Warnings: 0
+
+mysql> CREATE TABLE schedules
+    ->         (id int NOT NULL AUTO_INCREMENT,
+    ->         emp_id int,
+    ->         dept varchar(255),
+    ->         shift_date DATETIME,
+    ->         start TIME,
+    ->         length TIME,
+    ->         PRIMARY KEY(id),
+    ->         FOREIGN KEY (emp_id) REFERENCES employees(empid) ON DELETE CASCADE ON UPDATE CASCADE,
+    ->         FOREIGN KEY (dept) REFERENCES departments(name) ON DELETE CASCADE ON UPDATE CASCADE);
+Query OK, 0 rows affected (0.03 sec)
+mysql> LOAD DATA LOCAL INFILE '/home/grads/yus376/CS431W/cmpsc431w/datafiles/schedule.csv'
+    ->         INTO TABLE schedules
+    ->         FIELDS TERMINATED BY ','
+    ->         OPTIONALLY ENCLOSED BY '"'
+    ->         LINES TERMINATED BY '\r\n'
+    ->         IGNORE 1 LINES (@col1, @col2, @col3, @col4, @col5)
+    ->         SET emp_id = @col2,
+    ->             dept = @col3,
+    ->             shift_date=STR_TO_DATE(@col1,'%m/%d/%Y'),
+    ->             start=STR_TO_DATE(@col4,'%h%p'),
+    ->             length=STR_TO_DATE(@col5,'%H');
+Query OK, 434 rows affected (0.02 sec)
+Records: 434  Deleted: 0  Skipped: 0  Warnings: 0
+
++====================================+
+|        MANIPULATE THE DATÂ         |
++====================================+
+
+/*set the NULL values correct */
+mysql> UPDATE employees SET cellphone=NULL WHERE cellphone='(none)';
+Query OK, 3 rows affected (0.00 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+mysql> UPDATE employees SET homephone=NULL WHERE homephone='(none)';
+Query OK, 4 rows affected (0.00 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+/*add room number into the schedules table and give it a constraint */
+mysql> ALTER TABLE schedules ADD COLUMN room INT;
+Query OK, 434 rows affected (0.04 sec)
+Records: 434  Duplicates: 0  Warnings: 0
+mysql> ALTER TABLE schedules ADD CONSTRAINT FOREIGN KEY (room) REFERENCES rooms(id) ON DELETE CASCADE ON UPDATE CASCADE;
+Query OK, 434 rows affected (0.03 sec)
+Records: 434  Duplicates: 0  Warnings: 0
+
+/*randomly assign rooms to the schedules (25 rooms in total) */
+mysql> UPDATE schedules SET room= (FLOOR( 1 + RAND( ) *25 ));
+Query OK, 434 rows affected (0.04 sec)
+Rows matched: 434  Changed: 434  Warnings: 0
+
+/*add a shift_num to the schedules table to replace the duplicated start time and shift length */
+mysql> ALTER TABLE schedules ADD COLUMN shift_num INT;
+Query OK, 434 rows affected (0.03 sec)
+Records: 434  Duplicates: 0  Warnings: 0
+mysql> ALTER TABLE schedules ADD CONSTRAINT FOREIGN KEY (shift_num) REFERENCES shifts(id) ON DELETE CASCADE ON UPDATE CASCADE;
+Query OK, 434 rows affected (0.03 sec)
+Records: 434  Duplicates: 0  Warnings: 0
+mysql> UPDATE schedules,shifts SET shift_num=shifts.id WHERE shifts.start=schedules.start AND shifts.length=schedules.length;
+Query OK, 434 rows affected (0.05 sec)
+Rows matched: 434  Changed: 434  Warnings: 0
+
+/*drop duplicated columns */
+mysql> ALTER TABLE schedules DROP COLUMN start, DROP COLUMN length;
+Query OK, 434 rows affected (0.03 sec)
+Records: 434  Duplicates: 0  Warnings: 0
+
++====================================+
+|    GENERATE THE FOLLOWING DATA     |
++====================================+
+SELECT lastName, firstName, cellphone, DATE_FORMAT(shift_date,'%Y-%m-%d') AS 'date', dept AS 'department', DATE_FORMAT(start,'%h%p') AS 'start time', CONVERT(DATE_FORMAT(length,'%H'),UNSIGNED) AS 'shift length' FROM employees, schedules, shifts 
+        WHERE schedules.emp_id=employees.empid AND schedules.shift_num=shifts.id 
+        ORDER BY lastName ASC, firstName ASC, shift_date ASC, start ASC LIMIT 20;
+
+
