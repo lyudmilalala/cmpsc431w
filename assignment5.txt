@@ -179,6 +179,12 @@ mysql> UPDATE employees SET homephone=NULL WHERE homephone='(none)';
 Query OK, 4 rows affected (0.00 sec)
 Rows matched: 4  Changed: 4  Warnings: 0
 
+CREATE TABLE phones 
+	(number varchar(255) NOT NULL, 
+	holder_id int NOT NULL, 
+	type varchar(255), 
+	PRIMARY KEY (number, holder_id));
+    
 /*add room number into the schedules table and give it a constraint */
 mysql> ALTER TABLE schedules ADD COLUMN room INT;
 Query OK, 434 rows affected (0.04 sec)
